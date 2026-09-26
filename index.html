@@ -1215,12 +1215,12 @@ function renderDpsMeter(id){
  const maxHeal=Math.max(1,...s.heals.map(x=>Number(x)||0));
  const activeIndex=getActivePlayerIndex(id);
  const activeName=activeIndex===null?'Aucun joueur':combatPlayerNames[activeIndex];
- const damageRows=combatPlayerNames.map((name,i)=>{
-   const dmg=Number(s.players[i])||0,dps=elapsed?dmg/elapsed:0,pct=Math.max(0,Math.min(100,dmg/maxDamage*100));
+ const damageRows=combatPlayerNames.map((name,i)=>({name,i,value:Number(s.players[i])||0})).sort((a,b)=>b.value-a.value).map(({name,i,value:dmg})=>{
+   const dps=elapsed?dmg/elapsed:0,pct=Math.max(0,Math.min(100,dmg/maxDamage*100));
    return '<div class="dps-meter-row"><div class="dps-meter-name">'+escapeHTML(name)+'</div><div class="dps-meter-bar"><div class="dps-meter-fill" style="width:'+pct+'%"></div></div><div class="dps-meter-dmg">'+dmg+'</div><div class="dps-meter-value">'+dps.toFixed(1)+' DPS</div></div>';
  }).join('');
- const healRows=combatPlayerNames.map((name,i)=>{
-   const heal=Number(s.heals[i])||0,hps=elapsed?heal/elapsed:0,pct=Math.max(0,Math.min(100,heal/maxHeal*100));
+ const healRows=combatPlayerNames.map((name,i)=>({name,i,value:Number(s.heals[i])||0})).sort((a,b)=>b.value-a.value).map(({name,i,value:heal})=>{
+   const hps=elapsed?heal/elapsed:0,pct=Math.max(0,Math.min(100,heal/maxHeal*100));
    return '<div class="dps-meter-row"><div class="dps-meter-name">'+escapeHTML(name)+'</div><div class="dps-meter-bar"><div class="hps-meter-fill" style="width:'+pct+'%"></div></div><div class="dps-meter-dmg">'+heal+'</div><div class="dps-meter-value">'+hps.toFixed(1)+' HPS</div></div>';
  }).join('');
  const totalDps=elapsed?(Number(s.total)||0)/elapsed:0,totalHps=elapsed?(Number(s.healTotal)||0)/elapsed:0;
