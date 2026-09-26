@@ -57,6 +57,9 @@ h2{font-family:Georgia,serif;color:var(--gold2);font-size:32px;text-shadow:0 2px
 .bookArrow{background:rgba(49,35,23,.9);border:1px solid #89673c;box-shadow:0 3px 12px #000}.bookArrow:hover{background:#64482d}
 @media(max-width:800px){.side{width:100%}.main{padding:22px}}
 .side{overflow-y:auto;overflow-x:hidden;}
+.campaign-save-card{border-color:#725535;background:linear-gradient(145deg,rgba(48,35,25,.98),rgba(28,20,15,.98))}
+.campaign-save-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#campaignSaveStatus{margin-top:10px;min-height:18px}
 .combat-player-card{cursor:pointer;transition:.15s ease}.combat-player-card:hover{border-color:#8f6d3d;transform:translateY(-1px)}.combat-player-card.combat-target{border-color:#d2a65a;box-shadow:0 0 0 2px rgba(210,166,90,.22),0 5px 16px #0008;background:linear-gradient(145deg,#3a2a1a,#21160f)}.combat-player-target-badge{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:5px;background:#6d4b24;color:#f5ddb0;font-size:10px}.combat-target-banner{margin:8px 0;padding:8px 10px;border:1px solid #76552d;border-radius:6px;background:#2a1d14;color:#ead7b6;font-size:12px}.combat-target-banner strong{color:#f0cf8d}.combat-temp-row{display:flex;align-items:center;gap:5px;margin-top:5px}.combat-temp-row input{width:58px!important;min-width:58px!important}.combat-dice-panel{margin-top:9px;padding:9px;border-top:1px solid #493624}.combat-dice-title{font-size:13px;color:#e0bd79;font-weight:bold;margin-bottom:6px}.combat-dice-controls{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.combat-dice-controls select,.combat-dice-controls input{background:#17120f;color:#f4eadb;border:1px solid #6a4a21;border-radius:5px;padding:5px 6px}.combat-dice-controls input{width:54px;text-align:center}.combat-dice-controls button{background:#6d4b24;color:#fff;border:1px solid #9a713b;border-radius:5px;padding:5px 8px;cursor:pointer}.combat-dice-result{margin-top:6px;min-height:20px;color:#f0cf8d}.combat-attack-result.attack-hit{color:#72c477}.combat-attack-result.attack-miss{color:#df6565}.combat-attack-result.attack-none{color:#e0bd79}.combat-auto-damage{font-size:11px;margin-left:5px}.combat-damage-memory{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:7px;padding:6px 8px;border-top:1px solid #493624;background:#261b13;border-radius:5px;font-size:11px;color:#d8c2a2}.combat-damage-memory strong{color:#f0cf8d;font-size:16px}.combat-save-controls{display:inline-flex;align-items:center;gap:4px;margin:4px 0;flex-wrap:wrap}.combat-save-controls button{background:#3a2919;color:#f4eadb;border:1px solid #76552d;border-radius:5px;padding:4px 7px;cursor:pointer;font-size:11px}.combat-save-controls button:hover{background:#5a3d22}.combat-save-result{font-size:11px}.combat-save-result.save-fail{color:#df6565}.combat-save-result.save-success{color:#72c477}
 
 
@@ -366,6 +369,16 @@ h2{font-family:Georgia,serif;color:var(--gold2);font-size:32px;text-shadow:0 2px
 <h2>🎒 Inventaire des joueurs</h2>
 <p class="small-note">Les inventaires et les PO sont sauvegardés automatiquement dans ce navigateur. Les quatre joueurs sont affichés ici en permanence.</p>
 <div class="inventory-tvbar"><button class="link" onclick="openInventoryTV()">📺 Afficher les 4 inventaires sur TV</button></div>
+<div class="card campaign-save-card">
+  <h3>💾 Sauvegarde de campagne</h3>
+  <p class="small-note">Exporte les inventaires et les PO des 4 joueurs dans un fichier de campagne. Tu pourras ensuite importer ce fichier dans un autre acte de <b>The Last Heart</b>.</p>
+  <div class="campaign-save-actions">
+    <button class="link" onclick="exportCampaignSave()">💾 Sauvegarder la campagne</button>
+    <button class="link" onclick="document.getElementById('campaignSaveFile').click()">📂 Charger une sauvegarde</button>
+    <input id="campaignSaveFile" type="file" accept=".json,application/json" style="display:none" onchange="importCampaignSave(event)">
+  </div>
+  <div id="campaignSaveStatus" class="small-note"></div>
+</div>
 <div id="playerInventoryGrid" class="player-inventory-grid"></div>
 </section>
 
@@ -953,6 +966,74 @@ function broadcastInventories(){
  try{if('BroadcastChannel' in window){ if(!window._inventoryChannel) window._inventoryChannel=new BroadcastChannel('theLastHeartInventories'); window._inventoryChannel.postMessage(payload); }}catch(e){}
 }
 function saveInventories(){localStorage.setItem(inventoryKey,JSON.stringify(playerInventories));broadcastInventories();}
+function setCampaignSaveStatus(message,isError=false){
+ const el=document.getElementById('campaignSaveStatus');
+ if(!el)return;
+ el.textContent=message;
+ el.style.color=isError?'#df8b8b':'#bda98b';
+}
+function exportCampaignSave(){
+ const save={
+   format:'The Last Heart — Sauvegarde de campagne',
+   version:1,
+   acte:4,
+   savedAt:new Date().toISOString(),
+   players:playerInventories.map(p=>({
+     name:p.name,
+     po:Number(p.po)||0,
+     items:Array.isArray(p.items)?p.items.map(it=>({name:String(it.name||''),qty:Math.max(0,Math.floor(Number(it.qty)||0))})).filter(it=>it.name&&it.qty>0):[]
+   }))
+ };
+ const blob=new Blob([JSON.stringify(save,null,2)],{type:'application/json;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url;
+ a.download='The_Last_Heart_Sauvegarde.json';
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ URL.revokeObjectURL(url);
+ setCampaignSaveStatus('✅ Sauvegarde créée : The_Last_Heart_Sauvegarde.json');
+}
+function importCampaignSave(event){
+ const file=event.target.files&&event.target.files[0];
+ if(!file)return;
+ const input=event.target;
+ const reader=new FileReader();
+ reader.onload=()=>{
+   try{
+     const data=JSON.parse(String(reader.result||''));
+     if(!data||data.format!=='The Last Heart — Sauvegarde de campagne'||!Array.isArray(data.players)){
+       throw new Error('Fichier de sauvegarde The Last Heart invalide.');
+     }
+     const byName=new Map(data.players.map(p=>[String(p.name),p]));
+     playerInventories=inventoryPlayers.map(name=>{
+       const source=byName.get(name)||{};
+       return {
+         name,
+         po:Math.max(0,Math.round((Number(source.po)||0)*100)/100),
+         items:Array.isArray(source.items)?source.items.map(it=>({
+           name:String(it?.name||'').trim(),
+           qty:Math.max(0,Math.floor(Number(it?.qty)||0))
+         })).filter(it=>it.name&&it.qty>0):[]
+       };
+     });
+     saveInventories();
+     renderInventories();
+     if(typeof renderAlchemyShop==='function')renderAlchemyShop();
+     if(typeof renderBonCapShop==='function')renderBonCapShop();
+     if(typeof renderPortShop==='function')renderPortShop();
+     setCampaignSaveStatus('✅ Sauvegarde chargée avec succès.');
+   }catch(err){
+     console.error(err);
+     setCampaignSaveStatus('❌ Impossible de charger cette sauvegarde.',true);
+   }finally{
+     input.value='';
+   }
+ };
+ reader.onerror=()=>{setCampaignSaveStatus('❌ Impossible de lire le fichier.',true);input.value='';};
+ reader.readAsText(file);
+}
 function renderInventories(){
  const grid=document.getElementById('playerInventoryGrid'); if(!grid)return;
  grid.innerHTML=playerInventories.map((p,i)=>`<div class="player-inventory-card">
