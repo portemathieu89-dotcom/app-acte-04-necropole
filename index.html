@@ -833,7 +833,7 @@ function rollInlineDice(count,sides,modifier,button){
  const out=button?.parentElement?.querySelector('.inline-dice-result');
  if(out)out.innerHTML='<b>'+total+'</b> <span class="inline-dice-detail">('+(isCritical?'💥 CRITIQUE · ':'')+(saveApplies?'🟢 DEMI-DÉGÂTS · ':'')+detail+')</span>';
  const p=button?.closest('p'),attackResult=p?.querySelector('.combat-attack-result');
- if(isDamageButton&&((attackResult?.dataset?.hit==='1'&&attack?.hit&&attack.targetIndex!==undefined)||(save?.targetIndex!==undefined&&save?.result))){
+ if(isDamageButton&&((attack?.hit&&attack.targetIndex!==undefined)||(save?.targetIndex!==undefined&&save?.result))){
    const targetIndex=attack?.hit?attack.targetIndex:save.targetIndex;
    const result=applyCombatPlayerDamage(targetIndex,total);
    combatDamageState[currentOpenFicheId+'_'+targetIndex]={actual:total};
@@ -874,7 +874,7 @@ function rollInlineDiceMulti(parts,button){
  const out=button?.parentElement?.querySelector('.inline-dice-result');
  if(out)out.innerHTML='<b>'+total+'</b> <span class="inline-dice-detail">('+(isCritical?'💥 CRITIQUE · ':'')+detail+')</span>';
  const p=button?.closest('p'),attackResult=p?.querySelector('.combat-attack-result');
- if(isDamageButton&&((attackResult?.dataset?.hit==='1'&&attack?.hit&&attack.targetIndex!==undefined)||(save?.targetIndex!==undefined&&save?.result))){
+ if(isDamageButton&&((attack?.hit&&attack.targetIndex!==undefined)||(save?.targetIndex!==undefined&&save?.result))){
    const targetIndex=attack?.hit?attack.targetIndex:save.targetIndex;
    const result=applyCombatPlayerDamage(targetIndex,total);
    combatDamageState[currentOpenFicheId+'_'+targetIndex]={actual:total};
