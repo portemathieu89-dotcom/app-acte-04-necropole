@@ -486,8 +486,14 @@ function renderFicheContent(id){return renderFichePV(id)}
 function ensureFicheCombat(id){
  const defs=combatPresets[id]; if(!defs)return;
  defs.enemies.forEach((d,i)=>{
-   if(!combatState.enemies.some(e=>e.ficheId===id&&e.ficheIndex===i)){
+   const existing=combatState.enemies.find(e=>e.ficheId===id&&e.ficheIndex===i);
+   if(!existing){
      combatState.enemies.push({name:d[0],max:d[1],current:d[1],ca:d[2]??'',ficheId:id,ficheIndex:i});
+   }else{
+     existing.name=d[0];
+     existing.max=d[1];
+     existing.ca=d[2]??'';
+     existing.current=Math.max(0,Math.min(Number(existing.max)||0,Number(existing.current)||0));
    }
  });
  saveCombatPV();
