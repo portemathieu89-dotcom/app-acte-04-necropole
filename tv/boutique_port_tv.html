@@ -1,0 +1,21 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Port — The Last Heart</title><style>*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:#0b0806;color:#eee8dc}body{font-family:Georgia,serif}.shop-tv{min-height:100vh;padding:22px 28px;background:radial-gradient(circle at top,#302219 0,#120c08 55%,#080605 100%)}h1{text-align:center;color:#d8b46a;font-size:40px;margin:0 0 5px}.subtitle{text-align:center;color:#b9a890;font-size:17px;margin-bottom:20px}.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;max-width:1800px;margin:0 auto}.card{background:linear-gradient(145deg,#2a1f17,#15100c);border:1px solid #765534;border-radius:10px;padding:16px;min-height:155px;box-shadow:0 7px 18px #0008;display:flex;flex-direction:column}.name{font-size:18px;font-weight:bold;color:#e4c681;line-height:1.18}.price{font-size:21px;color:#f0d17d;font-weight:bold;margin-top:auto;padding-top:14px}.footer{text-align:center;color:#8d806f;font-size:12px;margin-top:14px}@media(max-width:1200px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style>
+#tvToolbar{position:fixed;top:12px;right:12px;z-index:50;display:flex;gap:6px;opacity:.2;transition:opacity .2s}
+#tvToolbar:hover{opacity:1}
+#tvToolbar button{background:rgba(49,35,23,.94);color:#fff;border:1px solid #89673c;border-radius:6px;padding:8px 12px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 3px 12px #000}
+@media(max-width:800px){#tvToolbar{opacity:.65}}
+</style></head><body><div id="tvToolbar"><button type="button" onclick="toggleFullscreen()">⛶ Plein écran</button></div><main class="shop-tv"><h1>⚓ Port</h1><div class="subtitle">Accostage, stationnement, réparations et services portuaires</div><section id="grid" class="grid"></section><div class="footer">The Last Heart — Néréa · Tarifs portuaires</div></main><script>const items=[['Accostage simple','1 po'],['Accostage + amarrage sécurisé','2 po'],['Accostage pour la nuit','2 po'],['Accostage + surveillance du navire','5 po / nuit'],['Stationnement du navire plusieurs jours','2 po / jour'],['Réparation légère du navire','10 po'],['Réparation moyenne','25 po'],['Réparation importante','50 po+'],['Chargement / déchargement de marchandises','1 po'],['Eau douce pour le navire','5 pa']];document.getElementById('grid').innerHTML=items.map(p=>`<article class="card"><div class="name">${p[0]}</div><div class="price">🪙 ${p[1]}</div></article>`).join('');</script><script>
+async function toggleFullscreen(){
+  try{
+    if(window.parent&&window.parent!==window){
+      window.parent.postMessage({type:'theLastHeartTVCommand',command:'fullscreen'},'*');
+      return;
+    }
+    if(document.fullscreenElement)await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  }catch(e){}
+}
+document.addEventListener('fullscreenchange',()=>{
+  const b=document.querySelector('#tvToolbar button');
+  if(b)b.textContent=document.fullscreenElement?'↙ Quitter le plein écran':'⛶ Plein écran';
+});
+</script></body></html>

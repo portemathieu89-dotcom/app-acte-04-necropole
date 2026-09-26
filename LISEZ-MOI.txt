@@ -1,0 +1,27 @@
+THE LAST HEART — OUTIL MJ
+Version test : Acte 3 / Bestiaire / Quêtes
+
+1. Décompresse le ZIP.
+2. Ouvre le dossier.
+3. Double-clique sur index.html.
+4. Dans Acte 3, les trois fiches de mobs sont accessibles directement.
+5. Les fiches s'ouvrent à une taille confortable.
+6. Molette sur la fiche : zoom manuel.
+7. Double-clic : zoom 1,5x.
+8. Touche 0 : retour à 100%.
+9. Échap : fermer.
+
+Fiches incluses :
+- Crocodile géant
+- Kazhurak
+- Père Théodric possédé
+
+La quête d'Archibald avec les trois énigmes et leurs réponses est incluse.
+
+
+ORGANISATION DU DOSSIER
+- index.html : outil MJ principal
+- tv/ : affichages TV (inventaires, boutiques, viewer)
+- images/ : images classées par cartes, lieux, PNJ, objets, livre, bestiaire, marine et joueurs
+- fiches/mobs/ : fiches de monstres
+- sons/ : musiques et effets sonores

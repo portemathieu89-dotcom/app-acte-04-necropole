@@ -1,0 +1,47 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Boutique d'Alchimie — The Last Heart</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:#0b0806;color:#eee8dc}body{font-family:Georgia,serif;overflow:auto}.shop-tv{min-height:100vh;padding:14px 18px;background:radial-gradient(circle at top,#302219 0,#120c08 55%,#080605 100%)}
+h1{text-align:center;color:#d8b46a;font-size:34px;margin:0 0 2px}.subtitle{text-align:center;color:#b9a890;font-size:14px;margin-bottom:10px}.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;max-width:1800px;margin:0 auto}.card{background:linear-gradient(145deg,#2a1f17,#15100c);border:1px solid #765534;border-radius:9px;padding:9px 10px;min-height:165px;box-shadow:0 6px 14px #0008;display:flex;flex-direction:column}.name{font-size:16px;font-weight:bold;color:#e4c681;line-height:1.08;min-height:38px}.price{font-size:16px;color:#f0d17d;font-weight:bold;margin:4px 0}.effect{font-size:12.5px;line-height:1.2;color:#eee8dc;margin-top:1px}.footer{text-align:center;color:#8d806f;font-size:11px;margin-top:8px}@media(max-width:1200px){.grid{grid-template-columns:repeat(6,minmax(0,1fr))}}@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.potion-icon{width:32px;height:32px;object-fit:contain;flex:none;margin-right:5px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}.name{display:flex;align-items:center;gap:2px}</style><style>
+#tvToolbar{position:fixed;top:12px;right:12px;z-index:50;display:flex;gap:6px;opacity:.2;transition:opacity .2s}
+#tvToolbar:hover{opacity:1}
+#tvToolbar button{background:rgba(49,35,23,.94);color:#fff;border:1px solid #89673c;border-radius:6px;padding:8px 12px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 3px 12px #000}
+@media(max-width:800px){#tvToolbar{opacity:.65}}
+</style></head><body><div id="tvToolbar"><button type="button" onclick="toggleFullscreen()">⛶ Plein écran</button></div><main class="shop-tv"><h1>⚗️ Boutique d'Alchimie</h1><div class="subtitle">Potions et élixirs disponibles à la vente</div><section id="grid" class="grid"></section><div class="footer">The Last Heart — Néréa · Affichage boutique</div></main><script>
+const potions=[
+['Potion de soins',50,'Rend 2d4 + 2 PV.'],
+['Potion de soins supérieure',150,'Rend 4d4 + 4 PV.'],
+['Potion de soins suprême',450,'Rend 8d4 + 8 PV.'],
+['Potion de respiration aquatique',100,'Permet de respirer sous l’eau pendant 1 heure.'],
+['Potion d’escalade',75,'Pendant 1 heure, vitesse d’escalade égale à la vitesse de déplacement et avantage aux tests pour grimper.'],
+['Potion de croissance',150,'Effet d’Agrandissement pendant 1d4 heures, sans concentration.'],
+['Potion de résistance',150,'Donne la résistance à un type de dégâts choisi pendant 1 heure.'],
+['Potion d’amitié animale',150,'Permet d’utiliser l’effet d’Amitié avec les animaux pendant 1 heure.'],
+['Potion de souffle de feu',150,'Pendant 1 heure, permet de cracher du feu : attaque à distance, 4d6 dégâts de feu en cas d’échec du JS approprié.'],
+['Potion d’héroïsme',400,'Pendant 1 h : 10 PV temporaires + effet de Bénédiction, sans concentration.'],
+['Potion de forme gazeuse',600,'Permet de prendre une forme gazeuse pendant 1 heure.'],
+['Potion de clairvoyance',600,'Permet d’utiliser l’effet de Clairvoyance.'],
+['Potion de lecture des pensées',600,'Effet de Détection des pensées, DD 13.'],
+['Potion d’invisibilité',1000,'Rend invisible pendant 1 heure. L’effet prend fin si le personnage attaque ou lance un sort.'],
+['Potion d’invulnérabilité',2500,'Résistance à tous les dégâts pendant 1 minute.'],
+['Potion de vitesse',1500,'Effet de Hâte pendant 1 minute, sans concentration.'],
+['Potion de vitalité',2000,'Supprime l’épuisement et les maladies/poisons et améliore fortement la récupération.']
+];
+const potionIcons={"Potion de soins":"../images/potions/soins.png","Potion de soins supérieure":"../images/potions/soins_superieure.png","Potion de soins suprême":"../images/potions/soins_supreme.png","Potion de respiration aquatique":"../images/potions/respiration_aquatique.png","Potion d’escalade":"../images/potions/escalade.png","Potion de croissance":"../images/potions/croissance.png","Potion de résistance":"../images/potions/resistance.png","Potion d’amitié animale":"../images/potions/amitie_animale.png","Potion de souffle de feu":"../images/potions/souffle_de_feu.png","Potion d’héroïsme":"../images/potions/heroisme.png","Potion de forme gazeuse":"../images/potions/forme_gazeuse.png","Potion de clairvoyance":"../images/potions/clairvoyance.png","Potion de lecture des pensées":"../images/potions/lecture_des_pensees.png","Potion d’invisibilité":"../images/potions/invisibilite.png","Potion d’invulnérabilité":"../images/potions/invulnerabilite.png","Potion de vitesse":"../images/potions/vitesse.png","Potion de vitalité":"../images/potions/vitalite.png"};
+const esc=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+document.getElementById('grid').innerHTML=potions.map(p=>`<article class="card"><div class="name"><img class="potion-icon" src="${potionIcons[p[0]]||""}" alt="" loading="eager" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src=this.src.replace('/images/potions/','/images/objets/potions/')}else{this.style.display='none'}">${esc(p[0])}</div><div class="price">🪙 ${p[1].toLocaleString('fr-FR')} PO</div><div class="effect">${esc(p[2])}</div></article>`).join('');
+</script><script>
+async function toggleFullscreen(){
+  try{
+    if(window.parent&&window.parent!==window){
+      window.parent.postMessage({type:'theLastHeartTVCommand',command:'fullscreen'},'*');
+      return;
+    }
+    if(document.fullscreenElement)await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  }catch(e){}
+}
+document.addEventListener('fullscreenchange',()=>{
+  const b=document.querySelector('#tvToolbar button');
+  if(b)b.textContent=document.fullscreenElement?'↙ Quitter le plein écran':'⛶ Plein écran';
+});
+</script></body></html>
