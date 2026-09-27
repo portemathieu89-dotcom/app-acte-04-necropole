@@ -117,6 +117,27 @@ h2{font-family:Georgia,serif;color:var(--gold2);font-size:32px;text-shadow:0 2px
 @media(max-width:800px){.dice-toolbar{grid-template-columns:1fr 1fr}.dice-roll{width:100%}}
 </style>
 
+
+<style id="necro-scene-style">
+.necro-scene-card{border-color:#765534}
+.necro-danger-box{display:flex;flex-direction:column;gap:5px;margin:14px 0;padding:13px 15px;background:linear-gradient(145deg,#3a1713,#21110d);border:1px solid #8a3f32;border-radius:8px;color:#eadfc9}
+.necro-danger-box strong{color:#ef8b78;font-size:17px}
+.necro-scene-images{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}
+.necro-scene-images .card{margin:0}
+.necro-scene-images .thumb{height:230px}
+.necro-timer-panel{margin-top:18px;padding:16px;background:linear-gradient(145deg,#241913,#15100c);border:1px solid #765534;border-radius:9px}
+.necro-timer-head,.necro-solution-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.necro-timer-head strong,.necro-solution-head strong{color:#e0bd79}
+.necro-timer-display{font-size:48px;font-weight:bold;text-align:center;color:#e0bd79;letter-spacing:3px;margin:10px 0;text-shadow:0 2px 8px #000}
+.necro-timer-actions{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
+.necro-damage-alert{margin-top:12px;padding:10px;border:1px solid #493624;border-radius:6px;background:#211811;text-align:center;color:#d8c5a3}
+.necro-damage-alert.danger{color:#f08b78!important;border-color:#8a3f32!important;background:#321713!important}
+.necro-damage-log{margin-top:8px;max-height:180px;overflow:auto;font-size:12px;color:#cdb99a}
+.necro-damage-log div{padding:5px 7px;border-bottom:1px solid #493624}
+.necro-solution-panel{margin-top:12px;padding:14px;background:#211811;border:1px solid #58432e;border-radius:8px}
+.necro-solution-panel .hidden{display:none}
+@media(max-width:800px){.necro-scene-images{grid-template-columns:1fr}.necro-timer-display{font-size:40px}}
+</style>
 </head>
 <body>
 <div class="app"><aside class="side"><h1>☠️ The Last Heart</h1><div class="nav">
@@ -186,7 +207,47 @@ h2{font-family:Georgia,serif;color:var(--gold2);font-size:32px;text-shadow:0 2px
 <div id="acte4Scenes" class="section"><h3>🎬 Scènes</h3>
 <div class="card"><h3>🌫️ Arrivée</h3><p>Les héros découvrent un lieu silencieux, sans végétation, peuplé d'âmes errantes.</p></div>
 <div class="card"><h3>🗼 Ascension</h3><p>Progression dans la tour, rencontres surnaturelles et affrontements.</p></div>
-<div class="card"><h3>👻 Rencontre avec Calvinhi</h3><p>Au sommet, les héros peuvent enfin communiquer avec l'âme de Calvinhi.</p></div></div>
+<div class="card"><h3>👻 Rencontre avec Calvinhi</h3><p>Au sommet, les héros peuvent enfin communiquer avec l'âme de Calvinhi.</p></div>
+
+<div class="card necro-scene-card">
+<h3>🧩 La salle des dalles</h3>
+<p>Une salle mystérieuse composée de dalles et de trois murs portant les éléments d'une énigme. Les héros doivent trouver la bonne correspondance avant que la salle ne les tue.</p>
+<div class="necro-danger-box">
+<strong>☠️ DANGER — 1d6 dégâts par minute</strong>
+<span>Chaque personnage présent dans la salle subit automatiquement <b>1d6 dégâts</b> à chaque minute écoulée.</span>
+</div>
+
+<div class="necro-scene-images">
+<div class="card image-card"><img class="thumb" src="images/scenes/necropole/salle_dalles_sol.png" alt="Salle des dalles — sol" onclick="openImage(this.src,'Salle des dalles — sol')"><h3>🧱 Le sol</h3><p>Vue du sol et de ses dalles.</p><button class="link" onclick="openImage('images/scenes/necropole/salle_dalles_sol.png','Salle des dalles — sol')">📺 Afficher aux joueurs</button></div>
+<div class="card image-card"><img class="thumb" src="images/scenes/necropole/salle_dalles_mur_1.png" alt="Salle des dalles — mur 1" onclick="openImage(this.src,'Salle des dalles — mur 1')"><h3>🧱 Mur 1</h3><p>Première partie de l'énigme.</p><button class="link" onclick="openImage('images/scenes/necropole/salle_dalles_mur_1.png','Salle des dalles — mur 1')">📺 Afficher aux joueurs</button></div>
+<div class="card image-card"><img class="thumb" src="images/scenes/necropole/salle_dalles_mur_2.png" alt="Salle des dalles — mur 2" onclick="openImage(this.src,'Salle des dalles — mur 2')"><h3>🧱 Mur 2</h3><p>Deuxième partie de l'énigme.</p><button class="link" onclick="openImage('images/scenes/necropole/salle_dalles_mur_2.png','Salle des dalles — mur 2')">📺 Afficher aux joueurs</button></div>
+<div class="card image-card"><img class="thumb" src="images/scenes/necropole/salle_dalles_mur_3.png" alt="Salle des dalles — mur 3" onclick="openImage(this.src,'Salle des dalles — mur 3')"><h3>🧱 Mur 3</h3><p>Troisième partie de l'énigme.</p><button class="link" onclick="openImage('images/scenes/necropole/salle_dalles_mur_3.png','Salle des dalles — mur 3')">📺 Afficher aux joueurs</button></div>
+</div>
+
+<div class="necro-timer-panel">
+<div class="necro-timer-head"><strong>⏱️ Compteur de la salle</strong><span id="necroTimerStatus">Arrêté</span></div>
+<div id="necroTimerDisplay" class="necro-timer-display">00:00</div>
+<div class="necro-timer-actions">
+<button class="link" type="button" onclick="startNecroRoomTimer()">▶️ Démarrer</button>
+<button class="link" type="button" onclick="pauseNecroRoomTimer()">⏸️ Pause</button>
+<button class="link" type="button" onclick="resetNecroRoomTimer()">🔄 Réinitialiser</button>
+</div>
+<div id="necroDamageAlert" class="necro-damage-alert">Aucun dégât déclenché.</div>
+<div id="necroDamageLog" class="necro-damage-log"></div>
+</div>
+
+<div class="necro-solution-panel">
+<div class="necro-solution-head"><strong>🔐 Solution — MJ uniquement</strong><button class="link" type="button" onclick="toggleNecroSolution()">👁️ Afficher / masquer</button></div>
+<div id="necroSolution" class="hidden">
+<p><b>Épine → Rose</b></p>
+<p><b>Étoile → Soleil</b></p>
+<p><b>Pleure → Œil</b></p>
+<p><b>Sable → Sablier</b></p>
+<p class="small"><b>Solution complète :</b> Rose · Soleil · Œil · Sablier</p>
+</div>
+</div>
+</div>
+</div>
 <div id="acte4Sons" class="section"><h3>🔊 Sons</h3><div class="card"><p>Section réservée aux sons d'ambiance de la Nécropole.</p></div></div>
 <div id="acte4Musiques" class="section"><h3>🎵 Musiques</h3><div class="card"><p>Section réservée aux musiques d'exploration, de rencontres et de combats de la Nécropole.</p></div></div>
 </section>
@@ -1560,6 +1621,100 @@ initCombatPV();
   prev.onclick=()=>{const s=active&&info(active);const b=s&&document.getElementById(s.prev);if(b)b.click()};
   next.onclick=()=>{const s=active&&info(active);const b=s&&document.getElementById(s.next);if(b)b.click()};
   function init(){bind()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<script id="necro-scene-script">
+(function(){
+  const key='theLastHeartNecroRoomTimer';
+  let state=JSON.parse(localStorage.getItem(key)||'null')||{elapsed:0,running:false,startedAt:0,processedMinutes:0};
+  let interval=null;
+
+  function save(){localStorage.setItem(key,JSON.stringify(state));}
+  function elapsedSeconds(){
+    if(!state.running)return Math.max(0,Number(state.elapsed)||0);
+    return Math.max(0,(Number(state.elapsed)||0)+(Date.now()-Number(state.startedAt||Date.now()))/1000);
+  }
+  function formatTime(sec){
+    sec=Math.max(0,Math.floor(sec));
+    const m=String(Math.floor(sec/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    return m+':'+s;
+  }
+  function render(){
+    const display=document.getElementById('necroTimerDisplay');
+    const status=document.getElementById('necroTimerStatus');
+    if(display)display.textContent=formatTime(elapsedSeconds());
+    if(status)status.textContent=state.running?'🟢 En cours':'⏸️ En pause';
+  }
+  function rollD6(){return Math.floor(Math.random()*6)+1;}
+  function triggerMinute(minute){
+    const results=[];
+    if(typeof combatPlayers!=='undefined' && Array.isArray(combatPlayers)){
+      combatPlayers.forEach((p,i)=>{
+        const dmg=rollD6();
+        const result=typeof applyCombatPlayerDamage==='function'?applyCombatPlayerDamage(i,dmg):{tempLost:0,hpLost:dmg};
+        results.push((p.name||('Joueur '+(i+1)))+' : <b>'+dmg+' dégâts</b>'+(result.tempLost?' · '+result.tempLost+' temp.':'')+(result.hpLost?' · '+result.hpLost+' PV':''));
+      });
+    }else{
+      for(let i=0;i<4;i++)results.push('Joueur '+(i+1)+' : <b>'+rollD6()+' dégâts</b>');
+    }
+    const alert=document.getElementById('necroDamageAlert');
+    if(alert){alert.className='necro-damage-alert danger';alert.innerHTML='☠️ <b>Minute '+minute+' — 1d6 dégâts appliqués aux joueurs !</b>';}
+    const log=document.getElementById('necroDamageLog');
+    if(log){
+      const row=document.createElement('div');
+      row.innerHTML='<b>Minute '+minute+'</b> — '+results.join(' · ');
+      log.prepend(row);
+      while(log.children.length>20)log.removeChild(log.lastChild);
+    }
+  }
+  function processMinutes(){
+    const minutes=Math.floor(elapsedSeconds()/60);
+    while(state.processedMinutes<minutes){
+      state.processedMinutes++;
+      triggerMinute(state.processedMinutes);
+    }
+    save();
+    render();
+  }
+  window.startNecroRoomTimer=function(){
+    if(state.running)return;
+    state.elapsed=Math.max(0,Number(state.elapsed)||0);
+    state.startedAt=Date.now();
+    state.running=true;
+    save();render();
+    clearInterval(interval);
+    interval=setInterval(processMinutes,250);
+  };
+  window.pauseNecroRoomTimer=function(){
+    if(!state.running)return;
+    state.elapsed=elapsedSeconds();
+    state.running=false;
+    state.startedAt=0;
+    save();render();
+    clearInterval(interval);interval=null;
+  };
+  window.resetNecroRoomTimer=function(){
+    clearInterval(interval);interval=null;
+    state={elapsed:0,running:false,startedAt:0,processedMinutes:0};
+    save();render();
+    const alert=document.getElementById('necroDamageAlert');
+    if(alert){alert.className='necro-damage-alert';alert.textContent='Aucun dégât déclenché.';}
+    const log=document.getElementById('necroDamageLog');if(log)log.innerHTML='';
+  };
+  window.toggleNecroSolution=function(){
+    const el=document.getElementById('necroSolution');if(el)el.classList.toggle('hidden');
+  };
+  function init(){
+    render();
+    if(state.running){
+      clearInterval(interval);
+      interval=setInterval(processMinutes,250);
+      processMinutes();
+    }
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
